@@ -1,9 +1,159 @@
 ---
-title: "About"
+title: "Project 1"
+author: "George James"
+format: 
+  html:
+    css: styles.css  
+    toc: true
+    toc-location: left
 ---
 
-About this site
+This is my first mini-project for Data Science 2. I looked at coffee prices and how they differed by state.
 
 ```{r}
-1 + 1
+#| message: false
+#| warning: false
+
+# Load initial packages required
+library(tidyverse)
+library(mdsr) 
+#coffee_data:here("https://vinepair.com/articles/price-of-coffee-state-map/") 
+# Create a data frame with coffee prices by state
+coffee_data <- data.frame(
+  State = c("Hawaii", "California", "Washington", "Arizona", "Massachusetts",
+            "Colorado", "Utah", "Florida", "Vermont", "Connecticut",
+            "New Jersey", "New Mexico", "Alaska", "Louisiana", "Maryland",
+            "New York", "Nevada", "Oregon", "South Carolina", "New Hampshire",
+            "Rhode Island", "Maine", "Virginia", "Illinois", "Kentucky",
+            "Georgia", "Texas", "Delaware", "Idaho", "North Carolina",
+            "Pennsylvania", "Tennessee", "Oklahoma", "Minnesota", "Wyoming",
+            "Missouri", "Alabama", "Arkansas", "Michigan", "Ohio",
+            "Indiana", "Mississippi", "Wisconsin", "Iowa", "South Dakota",
+            "West Virginia", "North Dakota", "Kansas", "Montana", "Nebraska"),
+  
+  Price_of_Coffee = c(4.98, 3.88, 3.69, 3.51, 3.49, 3.43, 3.40, 3.38,
+                      3.32, 3.31, 3.31, 3.31, 3.27, 3.26, 3.25, 3.24,
+                      3.23, 3.21, 3.17, 3.13, 3.13, 3.08, 3.08, 3.07,
+                      3.03, 3.02, 2.99, 2.97, 2.94, 2.94, 2.94, 2.91,
+                      2.90, 2.89, 2.89, 2.88, 2.86, 2.86, 2.83, 2.79,
+                      2.78, 2.77, 2.76, 2.70, 2.66, 2.65, 2.64, 2.59,
+                      2.56, 2.12)
+)
+
+# Load US states map data
+library(maps)
+us_states <- map_data("state")
+head(us_states)
+
+# Calculate statistics for coffee prices
+mean_price <- mean(coffee_data$Price_of_Coffee)
+max_price <- max(coffee_data$Price_of_Coffee)
+min_price <- min(coffee_data$Price_of_Coffee)
+
+# Separate coffee data into above and below mean
+above_mean <- coffee_data[coffee_data$Price_of_Coffee > mean_price, ]
+below_mean <- coffee_data[coffee_data$Price_of_Coffee < mean_price, ]
+
+# Categorize coffee prices as Above or Below Mean
+coffee_data <- coffee_data %>%
+  mutate(Price_Group = ifelse(Price_of_Coffee > mean_price, "Above Mean", "Below Mean"))
+
+# Merge coffee data with state map data
+merged_data <- us_states %>%
+  left_join(coffee_data, by = c("region" = "State"))
+
+# Basic US states map
+us_states |>
+  ggplot(mapping = aes(x = long, y = lat, group = group)) + 
+  geom_polygon(fill = "white", color = "black") +
+  theme_minimal() +
+  labs(title = "US States Map")
+
+# Prepare coffee data for plotting
+coffee_data <- coffee_data |>
+  mutate(State = str_to_lower(State))
+
+# Create a map of coffee prices by state
+coffee_data |>
+  right_join(us_states, by = c("State" = "region")) |>
+  rename(region = State) |>
+  ggplot(mapping = aes(x = long, y = lat, group = group)) + 
+  geom_polygon(aes(fill = Price_of_Coffee), color = "black") +
+  theme_minimal() +
+  labs(title = "Coffee Prices by State", fill = "Price of Coffee ($)")
+
+# Merge coffee data with state map data
+merged_data0 <- us_states %>%
+  left_join(coffee_data, by = c("region" = "State"))
 ```
+A map of the United States displaying coffee prices by state. Each state is filled with a gradient color representing the price of coffee, with darker colors indicating higher prices. A color legend on the side shows the corresponding price ranges. We can see that Nebraska is the darkest, meaning it has the lowest coffee price. California is the lightest along with Washinton, indicating that they have higher coffee prices. 
+
+# Final map showing coffee price groups
+```{r}
+ggplot(data = merged_data0, aes(x = long, y = lat, group = group)) +
+  geom_polygon(aes(fill = Price_Group), color = "darkgrey", linewidth = 0.2) +
+  labs(fill = "Coffee Price Group") +
+  coord_fixed() + 
+  theme_void() +  
+  scale_fill_manual(values = c("brown1", "brown4")) +
+  ggtitle("Coffee Prices Across the USA")
+```
+A map of the United States illustrating coffee price groups. States are colored in varying shades of brown to indicate whether their coffee prices are above or below the mean price. A dark grey outline defines each state, and a legend indicates the coffee price categories. We can see that "Below Mean" is more in the middle of the US. The "Above Mean" is on the west coast and on the upper east coast.
+
+```{r}
+library(dplyr)
+library(tidyverse)
+library(glue)
+library(leaflet)
+# Load spatial data for US states
+library(sf)  # Load sf for spatial data
+states <- read_sf("https://rstudio.github.io/leaflet/json/us-states.geojson")  
+class(states)  # Check the class of the states object
+
+# Merge coffee data with state map data using spatial data
+merged_data2 <- states %>%
+  mutate(name = str_to_lower(name)) %>%
+  left_join(coffee_data, by = c("name" = "State"))
+
+# Create bins for coffee prices
+bins <- c(0, 2.5, 3.0, 3.5, 5.0, Inf)
+pal <- colorBin("YlOrRd", domain = merged_data$Price_of_Coffee, bins = bins)
+
+# Create labels for hovering
+merged_data2 <- merged_data2 %>%
+  mutate(label = glue("{name}: ${Price_of_Coffee}"))
+
+# Create the leaflet map
+leaflet(data = merged_data2) %>%
+  setView(-96, 37.8, 4) %>%
+  addTiles() %>%
+  addPolygons(
+    fillColor = ~pal(Price_of_Coffee),
+    weight = 2,
+    opacity = 1,
+    color = "white",
+    dashArray = "3",
+    fillOpacity = 0.7,
+    highlightOptions = highlightOptions(
+      weight = 5,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE
+    ),
+    label = ~label,
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "15px",
+      direction = "auto"
+    )
+  ) %>%
+  addLegend(
+    pal = pal,
+    values = ~Price_of_Coffee,
+    opacity = 0.7,
+    title = "Coffee Price ($)",
+    position = "bottomright"
+  )
+```
+An interactive map of the United States displaying coffee prices by state. Each state is filled with a color gradient representing coffee prices, with hover labels showing the state name and specific coffee price. A color legend in the bottom right corner indicates the price ranges, enhancing the visualization of coffee prices across the country. We can see the exact price for each state.

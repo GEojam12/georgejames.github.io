@@ -1,14 +1,18 @@
 project:
   type: website
-
+  output-dir: docs
+    
 website:
-  title: "georgejames.github.io"
+  title: "George James"
+  image: "Picture.jpg" 
   navbar:
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
-
+      - href: about.qmd
+        text: "Project 1"
+      - href: project2.qmd
+        text: "Project 2"
 format:
   html:
     theme: cosmo
@@ -16,4 +20,5 @@ format:
     toc: true
 
 editor: visual
+
 

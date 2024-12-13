@@ -1,11 +1,33 @@
 ---
-title: "georgejames.github.io"
+title: "About"
+image: "Picture.jpg"
+author: "George James"
+format: 
+  html:
+    css: styles.css  
+    toc: true
+    toc-location: left
 ---
 
-This is a Quarto website.
+::: {style="display: flex; align-items: center;"}
+<img src="Picture.jpg" alt="George James" class="profile-pic" style="border-radius: 50%; width: 150px;"/>
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
-
-```{r}
-1 + 1
+::: {style="margin-left: 20px;"}
+```         
+George James
+he/him/his
+Student at St. Olaf College
 ```
+:::
+:::
+
+## Experience
+
+-   **Student at St. Olaf College**
+    -   Focus on academic studies, active engagement in college community, and personal development.
+
+## Contact
+
+::: social-icons
+<a href="mailto:james7@stolaf.edu" title="Email">📧</a> <a href="https://github.com/GEojam12" title="GitHub">🐙</a>
+:::
