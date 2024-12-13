@@ -110,7 +110,7 @@ for(i in c(10, 11, 12, 1, 2, 3, 4)){
 ```
 
 ```{r}
-#| eval: FALSE
+
 #Running each individual month as a separate 
 #   for loop to be more efficient
 
@@ -223,7 +223,7 @@ april_tibble <- bind_rows(april) |>
 ```
 
 ```{r}
-#| eval: FALSE
+
 #Bind all of the tibbles from the previous chunk 
 #   together to create one big tibble called events 
 
@@ -238,7 +238,7 @@ events
 ```
 
 ```{r}
-#| eval: FALSE
+
 penguin_events <- events |> 
 #Separate the time from date to create a separate column
 #   for the time of the events
