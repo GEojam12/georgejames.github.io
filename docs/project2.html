@@ -244,18 +244,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co">#Test to see that our tibble looks appropriate</span></span>
 <span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="fu">scrape_events</span>(<span class="st">"https://www.penguinrandomhouse.com/authors/events/?page=2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 9 × 5
-  date                   book                           author       host  state
-  &lt;chr&gt;                  &lt;chr&gt;                          &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;
-1 12/14/2024 at 12pm     Up Island Harbor               Jean Stone   EDGA… MA   
-2 12/14/2024 at 2:00pm   Sir Callie and the Witch’s War Esme Symes-… BARN… MO   
-3 12/14/2024 at 5 PM     Alice in a Winter Wonderland   Jan Brett    Bell… WA   
-4 12/14/2024 at 10:00 am The Little Chefs               Rosemary We… BARR… CT   
-5 12/14/2024 at 10 AM    Safe Harbor                    Padma Venka… New … MA   
-6 12/14/2024             I Am the Grinch                Alastair He… Join… VA   
-7 12/14/2024             I Am the Grinch                Alastair He… Join… PA   
-8 12/14/2024             I Am the Grinch                Tom Brannon  Join… CT   
-9 12/14/2024 at 11:00am  Christmas Forever              Elysa Dutton CHEV… CA   </code></pre>
+<pre><code># A tibble: 10 × 5
+   date                   book                           author      host  state
+   &lt;chr&gt;                  &lt;chr&gt;                          &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;
+ 1 12/14/2024 at 12pm     Up Island Harbor               Jean Stone  EDGA… MA   
+ 2 12/14/2024 at 2:00pm   Sir Callie and the Witch’s War Esme Symes… BARN… MO   
+ 3 12/14/2024 at 5 PM     Alice in a Winter Wonderland   Jan Brett   Bell… WA   
+ 4 12/14/2024 at 10:00 am The Little Chefs               Rosemary W… BARR… CT   
+ 5 12/14/2024 at 10 AM    Safe Harbor                    Padma Venk… New … MA   
+ 6 12/14/2024             Mendel the Mess-Up             Terry LaBan BARN… PA   
+ 7 12/14/2024             I Am the Grinch                Alastair H… Join… VA   
+ 8 12/14/2024             I Am the Grinch                Alastair H… Join… PA   
+ 9 12/14/2024             I Am the Grinch                Alastair H… Join… CT   
+10 12/14/2024 at 11:00am  Christmas Forever              Elysa Dutt… CHEV… CA   </code></pre>
 </div>
 </div>
 <div class="cell">
